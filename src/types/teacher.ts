@@ -1,3 +1,5 @@
+import { Student } from './student';
+
 export interface Teacher {
   id: string;
   name: string;
@@ -31,6 +33,7 @@ export interface TeacherFormData {
   status: "active" | "inactive" | "on_leave";
   salary?: number;
   notes?: string;
+  student_ids?: string[];
 }
 
 export interface Parent {

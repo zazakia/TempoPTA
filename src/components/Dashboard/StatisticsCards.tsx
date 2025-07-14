@@ -15,6 +15,7 @@ interface StatisticsCardsProps {
   targetAmount?: number;
   percentagePaid?: number;
   totalStudents?: number;
+  userRole?: string;
   classSummary?: {
     className: string;
     percentagePaid: number;
@@ -31,6 +32,7 @@ const StatisticsCards = ({
   targetAmount = 50000,
   percentagePaid = 65,
   totalStudents = 200,
+  userRole = "treasurer",
   classSummary = [
     { className: "Grade 1", percentagePaid: 75 },
     { className: "Grade 2", percentagePaid: 60 },
