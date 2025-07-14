@@ -34,6 +34,7 @@ const paymentSchema = z.object({
   parentId: z.string().min(1, { message: "Parent is required" }),
   amount: z.string().min(1, { message: "Amount is required" }),
   paymentMethod: z.string().min(1, { message: "Payment method is required" }),
+  category: z.string().min(1, { message: "Payment category is required" }),
   paymentDate: z.date(),
   receiptFile: z.any().optional(),
 });
@@ -81,6 +82,7 @@ const PaymentRecordingForm = ({
     defaultValues: {
       amount: "250",
       paymentMethod: "cash",
+      category: "pta_fee",
       paymentDate: new Date(),
     },
   });
@@ -92,30 +94,43 @@ const PaymentRecordingForm = ({
     }
   };
 
-  const handleFormSubmit = (data: PaymentFormValues) => {
-    // In a real implementation, this would send data to the server
-    // and handle the response
-    console.log("Form submitted:", data);
+  const handleFormSubmit = async (data: PaymentFormValues) => {
+    try {
+      // In a real implementation, this would send data to the server
+      console.log("Form submitted:", data);
 
-    // Find the parent and update payment status for all linked students
-    const selectedParent = mockParents.find((p) => p.id === data.parentId);
-    if (selectedParent) {
-      // In a real implementation, this would update the database
-      // Update all students linked to this parent
-      console.log(
-        `Updating payment status for students: ${selectedParent.students.join(", ")}`,
-      );
+      // Here you would integrate with Supabase to record the payment
+      // Example implementation:
+      // await supabaseHelpers.recordPayment(
+      //   data.parentId,
+      //   parseFloat(data.amount),
+      //   data.paymentMethod,
+      //   data.category,
+      //   data.paymentDate.toISOString().split('T')[0]
+      // );
 
-      // Here you would typically make an API call to update all linked students
-      // Example: updateStudentPaymentStatus(selectedParent.studentIds, true, data.paymentDate)
+      // Find the parent and update payment status for all linked students
+      const selectedParent = mockParents.find((p) => p.id === data.parentId);
+      if (selectedParent) {
+        // In a real implementation, this would update the database
+        // Update all students linked to this parent
+        console.log(
+          `Updating payment status for students: ${selectedParent.students.join(", ")}`,
+        );
+
+        // Here you would typically make an API call to update all linked students
+        // Example: updateStudentPaymentStatus(selectedParent.studentIds, true, data.paymentDate)
+      }
+
+      onSubmit(data);
+
+      // Reset form after submission
+      reset();
+      setSelectedFile(null);
+      setSearchTerm("");
+    } catch (error) {
+      console.error("Error submitting payment:", error);
     }
-
-    onSubmit(data);
-
-    // Reset form after submission
-    reset();
-    setSelectedFile(null);
-    setSearchTerm("");
   };
 
   const selectParent = (parentId: string, parentName: string) => {
@@ -200,6 +215,31 @@ const PaymentRecordingForm = ({
                 </p>
               )}
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="category">Payment Category</Label>
+            <Select
+              onValueChange={(value) => setValue("category", value)}
+              defaultValue="pta_fee"
+            >
+              <SelectTrigger id="category">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="pta_fee">PTA Fee</SelectItem>
+                <SelectItem value="school_supplies">School Supplies</SelectItem>
+                <SelectItem value="field_trip">Field Trip</SelectItem>
+                <SelectItem value="uniform">Uniform</SelectItem>
+                <SelectItem value="books">Books</SelectItem>
+                <SelectItem value="activities">Activities</SelectItem>
+                <SelectItem value="fundraising">Fundraising</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.category && (
+              <p className="text-sm text-red-500">{errors.category.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">

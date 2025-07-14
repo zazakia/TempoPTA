@@ -157,6 +157,7 @@ const TeacherManagement: React.FC = () => {
     status: "active",
     salary: 0,
     notes: "",
+    student_ids: [],
   });
 
   // Reset form when dialog closes
@@ -176,6 +177,7 @@ const TeacherManagement: React.FC = () => {
         status: "active",
         salary: 0,
         notes: "",
+        student_ids: [],
       });
     }
   }, [isAddDialogOpen, isEditDialogOpen]);
@@ -197,6 +199,7 @@ const TeacherManagement: React.FC = () => {
         status: selectedTeacher.status,
         salary: selectedTeacher.salary || 0,
         notes: selectedTeacher.notes || "",
+        student_ids: [],
       });
     }
   }, [isEditDialogOpen, selectedTeacher]);
@@ -599,36 +602,31 @@ const TeacherManagement: React.FC = () => {
                     )}
                   </div>
 
-                  <div>
-                    <h3 className="text-lg font-medium mb-2">
-                      Assigned Students
-                    </h3>
-                    {availableStudents.filter(
-                      (s) => s.teacher_id === selectedTeacher.id,
-                    ).length > 0 ? (
-                      <div className="space-y-2">
-                        {availableStudents
-                          .filter((s) => s.teacher_id === selectedTeacher.id)
-                          .map((student) => (
-                            <div
-                              key={student.id}
-                              className="flex items-center justify-between p-2 border rounded"
-                            >
-                              <div>
-                                <p className="font-medium">{student.name}</p>
-                                <p className="text-sm text-muted-foreground">
-                                  {student.class_name}
-                                </p>
-                              </div>
+                  {availableStudents.filter(
+                    (s: any) => s.teacher_id === selectedTeacher.id,
+                  ).length > 0 ? (
+                    <div className="space-y-2">
+                      {availableStudents
+                        .filter((s: any) => s.teacher_id === selectedTeacher.id)
+                        .map((student) => (
+                          <div
+                            key={student.id}
+                            className="flex items-center justify-between p-2 border rounded"
+                          >
+                            <div>
+                              <p className="font-medium">{student.name}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {student.class_name}
+                              </p>
                             </div>
-                          ))}
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground">
-                        No students assigned
-                      </p>
-                    )}
-                  </div>
+                          </div>
+                        ))}
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground">
+                      No students assigned
+                    </p>
+                  )}
 
                   {selectedTeacher.notes && (
                     <div>

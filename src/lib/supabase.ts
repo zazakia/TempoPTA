@@ -146,6 +146,48 @@ export const supabaseHelpers = {
     return data;
   },
 
+  async recordPayment(
+    parentId: string,
+    amount: number,
+    paymentMethod: string,
+    category: string,
+    paymentDate: string,
+    receiptUrl?: string,
+  ) {
+    // Create payment record
+    const paymentData = {
+      parent_id: parentId,
+      amount,
+      payment_method: paymentMethod,
+      category,
+      payment_date: paymentDate,
+      receipt_url: receiptUrl || null,
+    };
+
+    const { data: payment, error: paymentError } = await supabase
+      .from("payments")
+      .insert(paymentData)
+      .select()
+      .single();
+
+    if (paymentError) throw paymentError;
+
+    // Update parent payment status
+    const { error: parentError } = await supabase
+      .from("parents")
+      .update({
+        payment_status: true,
+        payment_date: paymentDate,
+        payment_amount: amount,
+        payment_method: paymentMethod,
+      })
+      .eq("id", parentId);
+
+    if (parentError) throw parentError;
+
+    return payment;
+  },
+
   async getPayments() {
     const { data, error } = await supabase
       .from("payments")
