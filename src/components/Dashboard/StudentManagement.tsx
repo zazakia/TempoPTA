@@ -95,7 +95,7 @@ const StudentManagement: React.FC = () => {
         teacher_name: student.teacher?.name || "",
       }));
 
-      setStudents(formattedStudents);
+      setStudents(formattedStudents as Student[]);
       setAvailableTeachers(
         teachersData.map((t) => ({ id: t.id, name: t.name })),
       );

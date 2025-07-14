@@ -48,6 +48,7 @@ interface Student {
 interface StudentStatusTableProps {
   students?: Student[];
   classes?: string[];
+  userRole?: string;
 }
 
 const StudentStatusTable = ({
@@ -134,6 +135,7 @@ const StudentStatusTable = ({
     },
   ],
   classes = ["All Classes", "Grade 1-A", "Grade 2-B", "Grade 3-C"],
+  userRole = "treasurer",
 }: StudentStatusTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClass, setSelectedClass] = useState("All Classes");

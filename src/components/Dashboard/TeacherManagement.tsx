@@ -104,7 +104,7 @@ const TeacherManagement: React.FC = () => {
         supabaseHelpers.getStudents(),
       ]);
 
-      setTeachers(teachersData);
+      setTeachers(teachersData as Teacher[]);
       setAvailableStudents(
         studentsData.map((s) => ({
           id: s.id,
