@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -31,6 +31,11 @@ import TeacherManagement from "./Dashboard/TeacherManagement";
 const Home = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [userRole, setUserRole] = useState("treasurer"); // treasurer, administrator, teacher
+
+  useEffect(() => {
+    // App initialization
+    console.log("TempoPTA app initialized");
+  }, []);
 
   return (
     <div className="flex h-screen bg-background">
